@@ -1,0 +1,29 @@
+version: "3.9"
+
+networks:
+  spring-cloud-network:
+    driver: bridge
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.10-management
+    container_name: rabbitmq
+    hostname: rabbit
+    expose:
+      - 5672
+      - 15692
+    ports:
+        - 5672:5672
+        - 15672:15672
+        - 15692:15692
+    networks:
+      - spring-cloud-network
+  message-service:
+    container_name: message-service
+    build: ./
+    ports:
+      - 9090:9090
+    networks:
+      - spring-cloud-network
+    depends_on:
+      - rabbitmq
